@@ -634,10 +634,10 @@ Oceń odpowiedź ucznia i wskaż konkretnie, co jest dobre, a co trzeba poprawi�
         messages: [{ role: 'user', content: userMsg }]
       })
     });
-    const data = await resp.json();
-    const raw = data.content.map(c => c.text || '').join('');
-    const clean = raw.replace(/```json|```/g, '').trim();
-    const parsed = JSON.parse(clean);
+const data = await resp.json();
+const rawContent = data.content[0].text;
+// Gemini z ustawieniem responseMimeType: "application/json" czasem zwraca string, a czasem obiekt
+const parsed = typeof rawContent === 'string' ? JSON.parse(rawContent) : rawContent;
     renderFeedback(parsed);
     doneSet.add(currentIdx);
     saveDone();
