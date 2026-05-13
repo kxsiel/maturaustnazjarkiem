@@ -1575,9 +1575,10 @@ function renderExamples() {
 const prompt = `Jesteś egzaminatorem CKE sprawdzającym maturę ustną z języka polskiego. Twoim celem jest ocena, czy uczeń zna lekturę i potrafi wyciągnąć z niej wnioski zgodne z kluczem odpowiedzi.
 
 DANE UCZNIA:
-Teza: ${teza}
-Argumentacja (lektura): ${lekturaInfo}
-Kontekst: ${kontekst}
+TEMAT: "${tytulTematu}"
+TEZA: ${teza}
+LEKTURA: ${lekturaInfo}
+KONTEKST: ${kontekst}
 
 TWOJE WYTYCZNE (BARDZO WAŻNE):
 1. BĄDŹ ŻYCZLIWY: Jeśli uczeń pisze o Antygonie w kontekście praw boskich, to jest to POPRAWNE. Nie wymagaj od niego definicji naukowych ani teologicznych.
@@ -1591,6 +1592,45 @@ STRUKTURA ODPOWIEDZI (Używaj tylko <b> i <br>):
 <br><b>BŁĘDY:</b> (Wymień tylko jeśli przekręcił fakty. Jeśli nie ma błędów, napisz: "Brak błędów merytorycznych")
 <br><b>KONTEKST:</b> (Potwierdź, że kontekst wspiera wypowiedź)
 <br><b>WERDYKT: JEST OKEJ</b> (Pisz to zawsze, gdy praca jest na temat i nie ma kardynalnych błędów w faktach).`;
+    
+    btn.disabled = true;
+    loader.style.display = 'block';
+    fb.style.display = 'none';
+
+    try {
+        // Używamy Pollinations AI - jest darmowe, publiczne i bardzo stabilne
+        const response = await fetch('https://text.pollinations.ai/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                messages: [
+                    { role: "system", content: "Jesteś surowym egzaminatorem CKE. Piszesz tylko w czystym HTML (<b>, <br>)." },
+                    { role: "user", content: prompt }
+                ],
+                model: "openai", // Korzysta z wysokiej jakości modelu
+                seed: 42 // Stały seed sprawia, że odpowiedzi są bardziej przewidywalne
+            })
+        });
+
+        if (!response.ok) throw new Error("Problem z serwerem AI.");
+        const aiResponse = await response.text();
+        // Dodatkowe czyszczenie na wypadek, gdyby AI jednak użyło gwiazdek
+        const cleanResponse = aiResponse
+            .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>")
+            .replace(/\*(.*?)\*/g, "<i>$1</i>")
+            .replace(/\n/g, "<br>");
+        fb.innerHTML = "<h3>Werdykt Egzaminatora:</h3>" + cleanResponse;
+        fb.style.display = 'block';
+
+    } catch (e) {
+        console.error("Szczegóły błędu:", e);
+        fb.innerHTML = `<b style='color:#e88'>Błąd: Nie udało się pobrać werdyktu. Spróbuj ponownie.</b>`;
+        fb.style.display = 'block';
+    } finally {
+        btn.disabled = false;
+        loader.style.display = 'none';
+    }
+}
 
 const CHAPTERS = [
     { ts: "00:00",   s: 0,     label: "Wprowadzenie" },
