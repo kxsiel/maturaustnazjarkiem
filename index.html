@@ -438,6 +438,262 @@
             margin-bottom: 10px;
         }
 
+        /* === PORADY VIEW === */
+        #view-porady {
+            flex-direction: column;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(200,168,75,0.2) transparent;
+        }
+        .porady-inner {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 48px 40px 80px;
+            width: 100%;
+        }
+        .porady-main-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 38px;
+            font-weight: 700;
+            color: var(--gold-light);
+            text-align: center;
+            letter-spacing: 0.04em;
+            margin-bottom: 6px;
+        }
+        .porady-main-sub {
+            text-align: center;
+            font-size: 12px;
+            font-weight: 300;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(200,168,75,0.45);
+            margin-bottom: 48px;
+        }
+        .porady-section {
+            margin-bottom: 40px;
+            background: rgba(10,7,3,0.55);
+            border: 1px solid rgba(200,168,75,0.14);
+            border-radius: 8px;
+            overflow: hidden;
+            animation: fadeUp 0.4s ease;
+        }
+        .porady-section-header {
+            padding: 14px 24px;
+            background: rgba(200,168,75,0.08);
+            border-bottom: 1px solid rgba(200,168,75,0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .porady-section-badge {
+            font-size: 9px;
+            font-weight: 900;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gold);
+            background: rgba(200,168,75,0.12);
+            border: 1px solid rgba(200,168,75,0.25);
+            border-radius: 2px;
+            padding: 3px 8px;
+            flex-shrink: 0;
+        }
+        .porady-section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--gold-light);
+            line-height: 1.3;
+        }
+        .porady-section-body {
+            padding: 24px;
+        }
+
+        .porady-subsection {
+            margin-bottom: 28px;
+        }
+        .porady-subsection:last-child { margin-bottom: 0; }
+
+        .porady-type-label {
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            padding: 4px 10px;
+            border-radius: 2px;
+            display: inline-block;
+        }
+        .porady-type-stara {
+            color: #d4a843;
+            background: rgba(200,168,75,0.1);
+            border: 1px solid rgba(200,168,75,0.2);
+        }
+        .porady-type-nowa {
+            color: #7abfdf;
+            background: rgba(122,191,223,0.1);
+            border: 1px solid rgba(122,191,223,0.2);
+        }
+        .porady-type-wskazowki {
+            color: #a5d6a7;
+            background: rgba(165,214,167,0.1);
+            border: 1px solid rgba(165,214,167,0.2);
+        }
+
+        .porady-matura-box {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(200,168,75,0.12);
+            border-radius: 4px;
+            padding: 16px 18px;
+            margin-bottom: 10px;
+            font-size: 13.5px;
+            color: rgba(240,232,212,0.85);
+            line-height: 1.7;
+        }
+        .porady-matura-box b {
+            color: var(--gold-light);
+        }
+
+        .porady-poem {
+            background: rgba(255,255,255,0.025);
+            border-left: 3px solid rgba(200,168,75,0.35);
+            border-radius: 0 4px 4px 0;
+            padding: 16px 20px;
+            margin: 10px 0;
+            font-size: 13px;
+            color: rgba(240,232,212,0.7);
+            line-height: 1.9;
+            font-style: italic;
+            white-space: pre-line;
+        }
+        .porady-poem .poem-title {
+            font-style: normal;
+            font-weight: 700;
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: rgba(200,168,75,0.55);
+            margin-bottom: 8px;
+        }
+
+        .porady-note {
+            font-size: 12.5px;
+            color: rgba(240,232,212,0.6);
+            line-height: 1.7;
+            margin: 10px 0;
+            padding: 12px 16px;
+            border-left: 2px solid rgba(200,168,75,0.25);
+            background: rgba(200,168,75,0.04);
+            border-radius: 0 3px 3px 0;
+        }
+
+        .porady-list {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0;
+        }
+        .porady-list li {
+            font-size: 13.5px;
+            color: rgba(240,232,212,0.8);
+            line-height: 1.65;
+            padding: 6px 0 6px 20px;
+            position: relative;
+            border-bottom: 1px solid rgba(200,168,75,0.06);
+        }
+        .porady-list li:last-child { border-bottom: none; }
+        .porady-list li::before {
+            content: '◆';
+            position: absolute;
+            left: 0;
+            color: rgba(200,168,75,0.4);
+            font-size: 8px;
+            top: 10px;
+        }
+        .porady-list li b { color: var(--gold-light); }
+
+        .porady-steps {
+            counter-reset: step-counter;
+            list-style: none;
+            padding: 0;
+            margin: 10px 0;
+        }
+        .porady-steps li {
+            font-size: 13.5px;
+            color: rgba(240,232,212,0.8);
+            line-height: 1.65;
+            padding: 8px 0 8px 36px;
+            position: relative;
+            border-bottom: 1px solid rgba(200,168,75,0.06);
+            counter-increment: step-counter;
+        }
+        .porady-steps li:last-child { border-bottom: none; }
+        .porady-steps li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            width: 22px;
+            height: 22px;
+            background: rgba(200,168,75,0.12);
+            border: 1px solid rgba(200,168,75,0.25);
+            border-radius: 50%;
+            color: var(--gold);
+            font-size: 11px;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            top: 8px;
+        }
+
+        .porady-divider {
+            border: none;
+            border-top: 1px solid rgba(200,168,75,0.1);
+            margin: 24px 0;
+        }
+
+        .porady-starter-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin: 10px 0;
+        }
+        .porady-starter-item {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(200,168,75,0.1);
+            border-radius: 3px;
+            padding: 10px 14px;
+            font-size: 13px;
+            color: rgba(240,232,212,0.75);
+            line-height: 1.5;
+            font-style: italic;
+        }
+        .porady-starter-item::before {
+            content: '"';
+            color: var(--gold);
+            font-size: 16px;
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .porady-two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 10px 0;
+        }
+        .porady-col-box {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(200,168,75,0.1);
+            border-radius: 4px;
+            padding: 14px 16px;
+        }
+        .porady-col-box-title {
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(200,168,75,0.5);
+            margin-bottom: 10px;
+        }
+
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(16px); }
             to   { opacity: 1; transform: translateY(0); }
@@ -464,6 +720,7 @@
 
     <div class="nav-links">
         <button class="nav-btn" id="btn-przyklady" onclick="showView('przyklady')">PRZYKŁADY</button>
+        <button class="nav-btn" id="btn-porady" onclick="showView('porady')">PORADY</button>
         <button class="nav-btn active" id="btn-egzaminator" onclick="showView('egzaminator')">EGZAMINATOR AI</button>
     </div>
 </nav>
@@ -518,6 +775,141 @@
             <p>70 wzorcowych planów wypowiedzi z tezą, argumentacją i kontekstem życiowym.</p>
         </div>
         <div id="exList"></div>
+    </div>
+
+    <!-- === PORADY VIEW === -->
+    <div id="view-porady" class="view">
+        <div class="porady-inner">
+            <h1 class="porady-main-title">Matura Ustna</h1>
+            <p class="porady-main-sub">Najważniejsze porady</p>
+
+            <!-- TEMATY NIEJAWNE -->
+            <div class="porady-section">
+                <div class="porady-section-header">
+                    <span class="porady-section-badge">Tematy</span>
+                    <span class="porady-section-title">Tematy maturalne niejawne</span>
+                </div>
+                <div class="porady-section-body">
+
+                    <!-- KOSZYK IKONICZNY -->
+                    <div class="porady-subsection">
+                        <span class="porady-type-label" style="color:#e8b86d;background:rgba(232,184,109,0.1);border:1px solid rgba(232,184,109,0.22);font-size:9px;font-weight:900;letter-spacing:0.2em;text-transform:uppercase;padding:3px 10px;border-radius:2px;display:inline-block;margin-bottom:12px;">🖼 Koszyk ikoniczny</span>
+
+                        <div class="porady-matura-box">
+                            <b>STARA MATURA</b> — W jaki sposób w tekstach kultury przedstawiana jest rewolucja? Omów temat, odwołując się do obrazu Borysa Kustodijewa <em>„Rewolucja 1905"</em> oraz innych utworów literackich.
+                        </div>
+                        <div class="porady-matura-box">
+                            <b>NOWA MATURA</b> — W jaki sposób w tekstach kultury przedstawiana jest rewolucja? Omów zagadnienie na podstawie zamieszczonego poniżej materiału oraz wybranego utworu literackiego.
+                        </div>
+
+                        <div class="porady-note">
+                            <em>Na obrazku znajduje się reprodukcja obrazu Borysa Kustodijewa przedstawiająca gigantycznego szkieletora kroczącego nad płonącym miastem i barykadami.</em><br><br>
+                            *Rewolucja 1905 roku — ogólnokrajowy spontaniczny zryw o podłożu społecznym i narodowym, skierowany przeciwko absolutyzmowi carskiemu oraz uciskowi obszarników i przemysłowców. Wydarzenie to uważa się za początek zmian ustrojowych w Rosji, prowadzący do rewolucji lutowej i październikowej 1917 roku.
+                        </div>
+
+                        <div class="porady-note" style="margin-top:12px;">
+                            Pytanie o <b>sposób kreacji</b> wymaga, abyś nazwał/nazwała sposób kreacji, np.: <em>groteskowy, realistyczny, straszny, przerażający, komiczny, naturalistyczny, prawdziwy, idealistyczny</em> itp.
+                        </div>
+                    </div>
+
+                    <hr class="porady-divider">
+
+                    <!-- KOSZYK LITERACKI -->
+                    <div class="porady-subsection">
+                        <span class="porady-type-label" style="color:#9ec8e8;background:rgba(158,200,232,0.1);border:1px solid rgba(158,200,232,0.22);font-size:9px;font-weight:900;letter-spacing:0.2em;text-transform:uppercase;padding:3px 10px;border-radius:2px;display:inline-block;margin-bottom:12px;">📖 Koszyk literacki</span>
+
+                        <div class="porady-matura-box">
+                            <b>STARA MATURA</b> — Jakie są funkcje motywu miasta w tekstach kultury? Omów temat, odwołując się do wiersza Juliana Tuwima i innych tekstów kultury.
+                        </div>
+                        <div class="porady-matura-box">
+                            <b>NOWA MATURA</b> — Jakie są funkcje motywu miasta w tekstach kultury? Omów temat, odwołując się do załączonego materiału i innego tekstu kultury/utworu literackiego.
+                        </div>
+
+                        <div class="porady-poem">
+                            <div class="poem-title">Julian Tuwim — „Do krytyków"</div>A w maju
+Zwykłem jeździć, szanowni panowie,
+Na przedniej platformie tramwaju!
+Miasto na wskroś mnie przeszywa!
+Co się tam dzieje w mej głowie:
+Pędy, zapędy, ognie, ogniwa,
+Wesoło w czubie i w piętach,
+A najweselej na skrętach!
+Na skrętach — koliście
+Zagarniam zachwytem ramienia,
+A drzewa w porywie natchnienia
+Szaleją wiosenną wonią,
+Z radości pęka pąkowie,
+Ulice na alarm dzwonią,
+Maju, maju! — —
+Tak to jadę na przedniej platformie tramwaju,
+Wielce szanowni panowie!</div>
+
+                        <div class="porady-note" style="margin-top:14px;">
+                            Pytanie o <b>funkcje</b> jest pytaniem: <em>„po co"</em>, <em>„w jakim celu"</em> autor użył danego motywu. Aby odpowiedzieć na nie, zacznij od:
+                        </div>
+                        <div class="porady-starter-grid" style="margin-top:10px;">
+                            <div class="porady-starter-item">Autor użył..., aby...</div>
+                            <div class="porady-starter-item">Przez motyw miasta autor chciał...</div>
+                            <div class="porady-starter-item">Dzięki motywowi miasta widzimy...</div>
+                            <div class="porady-starter-item">Motyw miasta służy...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WSKAZÓWKI EGZAMINACYJNE -->
+            <div class="porady-section">
+                <div class="porady-section-header">
+                    <span class="porady-section-badge">Wskazówki</span>
+                    <span class="porady-section-title">Jak mówić o materiale załączonym?</span>
+                </div>
+                <div class="porady-section-body">
+                    <div class="porady-note" style="margin-bottom:18px;">
+                        Jeśli zdajesz maturę ustną, pamiętaj, że twoją siłą jest <b>załączony materiał</b>. W rozwinięciu skup się na nim.
+                    </div>
+
+                    <div class="porady-two-col">
+                        <div class="porady-col-box">
+                            <div class="porady-col-box-title" style="color:#e8b86d;">🖼 Dzieło ikoniczne (obraz)</div>
+                            <ul class="porady-list">
+                                <li><b>Kompozycja:</b> na pierwszym planie, na drugim planie</li>
+                                <li><b>Kolorystyka:</b> barwy zimne/ciepłe, kontrast między..., akcent kolorystyczny, barwy mocne, jaskrawe</li>
+                                <li><b>Typ malarstwa:</b> realistyczny, impresjonistyczny, pełen ekspresji, symboliczny, abstrakcyjny</li>
+                            </ul>
+                        </div>
+                        <div class="porady-col-box">
+                            <div class="porady-col-box-title" style="color:#9ec8e8;">📖 Dzieło literackie (tekst)</div>
+                            <ol class="porady-steps">
+                                <li>Przedstaw scenę i bohaterów (np. <em>Załączony fragment jest rozmową ojca i syna…</em>)</li>
+                                <li>Powiedz ogólnie, co się dzieje w tekście</li>
+                                <li>Odnoś się do tematu zawartego w poleceniu</li>
+                                <li>Przy wierszu — wskaż podmiot liryczny i adresat liryczny oraz ważne tropy stylistyczne</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OGÓLNE ZASADY -->
+            <div class="porady-section">
+                <div class="porady-section-header">
+                    <span class="porady-section-badge">Ogólne</span>
+                    <span class="porady-section-title">Zasady dobrej odpowiedzi</span>
+                </div>
+                <div class="porady-section-body">
+                    <ul class="porady-list">
+                        <li>Zacznij od <b>tezy lub hipotezy</b> — jedno zdanie, które odpowiada wprost na pytanie z tematu.</li>
+                        <li>Skup się na materiale załączonym — to on jest punktem wyjścia, nie lektura.</li>
+                        <li>Lektura i kontekst mają <b>wspierać</b> tezę, a nie zastępować analizę materiału.</li>
+                        <li>Przy pytaniu o <em>„sposób kreacji"</em> — zawsze nazwij ten sposób konkretnym przymiotnikiem.</li>
+                        <li>Przy pytaniu o <em>„funkcje"</em> — odpowiadaj na pytanie <em>„po co"</em>, nie <em>„co"</em>.</li>
+                        <li>Unikaj streszczania lektury — <b>interpretuj i argumentuj</b>.</li>
+                        <li>Mów płynnie i pewnie — komisja ocenia też kulturę wypowiedzi.</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
     </div>
 
 </div>
