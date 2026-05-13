@@ -1583,21 +1583,21 @@ async function askAI() {
     const lekturaInfo = document.getElementById('inL').value;
     const kontekst = document.getElementById('inK').value;
 
-    const prompt = `Jesteś konkretnym egzaminatorem CKE. Twoim zadaniem jest surowa ocena merytoryczna.
+    const prompt = `Twoim zadaniem jest ocenienie zadań - nie bądź surowy raczej normalny i racjonalny przedewszystkim.
 
 TEMAT WYBRANY PRZEZ UCZNIA: "${tytulTematu}"
 
-ODPOWIEDŹ UCZNIA DO OCENY:
+ODPOWIEDŹ UCZNIA
 - Teza: ${teza}
 - Argumentacja/Lektura: ${lekturaInfo}
 - Kontekst: ${kontekst}
 
 TWOJE ZADANIA:
-1. IDENTYFIKACJA: Na podstawie powyższych danych ustal, o jakiej lekturze pisze uczeń i czy pasuje ona do tematu.
+1. IDENTYFIKACJA: Napisz autora i tytył lektury o jakiej uczeń mówi.
 2. OCENA MERYTORYCZNA: Jeśli zdania są poprawne i sensowne, NIE ZMIENIAJ ICH. Potwierdź tylko, że są dobre.
-3. BŁĘDY: Poprawiaj tylko wtedy, gdy uczeń pisze głupoty, myli fakty z lektury lub jego argumentacja jest nielogiczna. Napisz wtedy konkretnie: "Tu jest błąd rzeczowy: [opis], powinno być: [poprawka]".
-4. KONTEKST: Sprawdź, czy kontekst (życiowy/historyczny) faktycznie wspiera tezę.
-5. WERDYKT: Na koniec napisz krótko: "WERDYKT: JEST OKEJ" (jeśli praca przechodzi) lub "WERDYKT: SŁABO" (jeśli są kardynalne błędy).
+3. BŁĘDY: Nie poprawiaj tylko napisz że to nie jest logiczne i dlaczego (Jeśli ma zdania poprzekręcane lub ma inne ułożenie zdań kolejnością to nie jest to błąd)
+4. KONTEKST: Sprawdź, czy kontekst ma sens (życiowy lub historyczny może się on do tego odnosić lecz ma potwierdzać tezę więc nie pisz mu że nie odnosi się do lektury tylko do tezy
+5. WERDYKT: Na koniec napisz krótko: "Jest okej" (jeśli praca przechodzi) lub "Jest słabo".
 
 FORMATOWANIE (BARDZO WAŻNE):
 - Używaj TYLKO tagów HTML: <b>pogrubienie</b> oraz <br> dla nowej linii.
