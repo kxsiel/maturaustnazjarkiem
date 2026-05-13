@@ -1611,29 +1611,30 @@ STRUKTURA ODPOWIEDZI (Używaj TYLKO <b> i <br>):
     fb.style.display = 'none';
 
     try {
-        const response = await fetch(`https://text.pollinations.ai/`, {
+        // Poprawny endpoint i formatowanie dla Pollinations AI
+        const response = await fetch('https://text.pollinations.ai/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                contents: [{ parts: [{ text: prompt }] }],
-                // Ustawienia blokujące fałszywe alarmy bezpieczeństwa
-                safetySettings: [
-                    { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
-                    { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
-                    { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_NONE" },
-                    { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" }
-                ]
+                messages: [
+                    { 
+                        role: "system", 
+                        content: "Jesteś praktycznym egzaminatorem maturalnym. Piszesz tylko w czystym HTML (<b>, <br>). Nie używasz gwiazdek." 
+                    },
+                    { role: "user", content: prompt }
+                ],
+                model: "openai"
             })
         });
 
-        const data = await response.json();
+        if (!response.ok) throw new Error("Serwer AI nie odpowiedział poprawnie.");
 
-        // Sprawdzenie czy API zwróciło treść
-        if (!data.candidates || !data.candidates[0].content) {
-            throw new Error("AI zablokowało odpowiedź lub wystąpił błąd serwera.");
+        // Pollinations zwraca tekst bezpośrednio, nie JSON
+        const aiResponse = await response.text();
+
+        if (!aiResponse || aiResponse.trim().length === 0) {
+            throw new Error("AI zwróciło pustą odpowiedź.");
         }
-
-        let aiResponse = data.candidates[0].content.parts[0].text;
 
         // Czyszczenie i formatowanie
         const cleanResponse = aiResponse
@@ -1647,7 +1648,7 @@ STRUKTURA ODPOWIEDZI (Używaj TYLKO <b> i <br>):
 
     } catch (e) {
         console.error("Szczegóły błędu:", e);
-        fb.innerHTML = `<b style='color:#e88'>Błąd: ${e.message}</b><br>Spróbuj odświeżyć stronę lub uprościć tekst.`;
+        fb.innerHTML = `<b style='color:#e88'>Wystąpił błąd: ${e.message}</b><br>Spróbuj ponownie za chwilę.`;
         fb.style.display = 'block';
     } finally {
         btn.disabled = false;
