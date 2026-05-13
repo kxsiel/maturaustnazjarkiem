@@ -1572,11 +1572,6 @@ function renderExamples() {
     });
 }
 
-Rozumiem, co się dzieje. Na obrazku image_3bb1dd.png widać, że darmowe API, którego używałeś, zwraca surowy proces myślowy modelu (tzw. reasoning chain), zamiast samej odpowiedzi. Dodatkowo model ten kompletnie nie radzi sobie z faktami, myląc Mickiewicza z Reymontem czy Borowskim.
-
-Poniżej znajdziesz poprawioną, bezpieczniejszą wersję funkcji. Dodałem w niej mechanizm "wycinania" zbędnego kodu JSON, gdyby API znów próbowało wysłać śmieciowe dane, oraz poprawiłem obsługę błędów.
-
-JavaScript
 async function askAI() {
     const btn = document.getElementById('btn');
     const loader = document.getElementById('loader');
