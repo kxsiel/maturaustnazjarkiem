@@ -1572,7 +1572,21 @@ function renderExamples() {
     });
 }
 
-const prompt = `Jesteś egzaminatorem CKE sprawdzającym maturę ustną z języka polskiego. Twoim celem jest ocena, czy uczeń zna lekturę i potrafi wyciągnąć z niej wnioski zgodne z kluczem odpowiedzi.
+async function askAI() {
+    const btn = document.getElementById('btn');
+    const loader = document.getElementById('loader');
+    const fb = document.getElementById('feedback');
+
+    if (!btn || !loader || !fb) return;
+
+    // Pobieranie danych z interfejsu
+    const tytulTematu = (typeof sel !== 'undefined' && sel) ? sel.t : "Nieznany temat";
+    const teza = document.getElementById('inT')?.value || "";
+    const lekturaInfo = document.getElementById('inL')?.value || "";
+    const kontekst = document.getElementById('inK')?.value || "";
+
+    // Poprawiony prompt - blokuje złośliwą nadinterpretację AI
+    const prompt = `Jesteś egzaminatorem CKE sprawdzającym maturę ustną. Twoim celem jest ocena, czy uczeń zna lekturę i potrafi wyciągnąć z niej wnioski zgodne z tematem.
 
 DANE UCZNIA:
 TEMAT: "${tytulTematu}"
@@ -1581,17 +1595,62 @@ LEKTURA: ${lekturaInfo}
 KONTEKST: ${kontekst}
 
 TWOJE WYTYCZNE (BARDZO WAŻNE):
-1. BĄDŹ ŻYCZLIWY: Jeśli uczeń pisze o Antygonie w kontekście praw boskich, to jest to POPRAWNE. Nie wymagaj od niego definicji naukowych ani teologicznych.
-2. BŁĘDY RZECZOWE: Poprawiaj TYLKO jeśli uczeń pomyli imiona, wydarzenia, autorów lub epoki (np. jeśli napisze, że Antygona to postać z Romantyzmu). 
-3. LOGIKA: Nie czepiaj się "generalizacji". Jeśli argument z lektury pasuje do tezy, uznaj go.
-4. KONTEKST: Kontekst współczesny (protesty, strajki) jest w pełni dopuszczalny na maturze jako kontekst społeczny. Uznaj go, jeśli wiąże się z tezą.
+1. BĄDŹ ŻYCZLIWY: Jeśli argumentacja z lektury (np. Antygony) pasuje do tezy, uznaj ją za poprawną. Nie wymagaj definicji naukowych ani teologicznych.
+2. BŁĘDY RZECZOWE: Poprawiaj TYLKO konkretne pomyłki w faktach (imiona, autorzy, wydarzenia). Nie czepiaj się "ogólności" wywodów.
+3. KONTEKST: Współczesne przykłady (protesty, wydarzenia społeczne) są w pełni dopuszczalne jako kontekst. 
+4. WERDYKT: Jeśli praca jest na temat i nie ma rażących błędów w fabule lektury, werdykt MUSI brzmieć: JEST OKEJ.
 
-STRUKTURA ODPOWIEDZI (Używaj tylko <b> i <br>):
-<b>IDENTYFIKACJA:</b> (Autor i tytuł lektury)
-<br><b>OCENA:</b> (Krótka informacja, że argumentacja jest trafna i zgodna z treścią utworu)
-<br><b>BŁĘDY:</b> (Wymień tylko jeśli przekręcił fakty. Jeśli nie ma błędów, napisz: "Brak błędów merytorycznych")
-<br><b>KONTEKST:</b> (Potwierdź, że kontekst wspiera wypowiedź)
-<br><b>WERDYKT: JEST OKEJ</b> (Pisz to zawsze, gdy praca jest na temat i nie ma kardynalnych błędów w faktach).`;
+STRUKTURA ODPOWIEDZI (Używaj TYLKO <b> i <br>):
+<b>IDENTYFIKACJA:</b> (Autor i tytuł)
+<br><b>OCENA:</b> (Krótka opinia o trafności argumentów)
+<br><b>BŁĘDY:</b> (Tylko błędy w faktach lub "Brak błędów merytorycznych")
+<br><b>KONTEKST:</b> (Czy wspiera tezę?)
+<br><b>WERDYKT: JEST OKEJ</b> lub <b>WERDYKT: SŁABO</b> (tylko przy kardynalnych błędach).`;
+
+    btn.disabled = true;
+    loader.style.display = 'block';
+    fb.style.display = 'none';
+
+    try {
+        const response = await fetch('https://text.pollinations.ai/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                messages: [
+                    { 
+                        role: "system", 
+                        content: "Jesteś praktycznym egzaminatorem maturalnym. Twoim zadaniem jest zaliczenie odpowiedzi ucznia, jeśli jest merytorycznie sensowna. Nie filozofuj, skup się na faktach literackich. Odpowiadaj tylko w HTML (<b>, <br>)." 
+                    },
+                    { role: "user", content: prompt }
+                ],
+                model: "openai",
+                seed: 42
+            })
+        });
+
+        if (!response.ok) throw new Error("Problem z połączeniem.");
+
+        const aiResponse = await response.text();
+
+        // Czyszczenie ewentualnego markdownu na HTML
+        const cleanResponse = aiResponse
+            .replace(/\*\*\*(.*?)\*\*\*/g, "<b>$1</b>")
+            .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>")
+            .replace(/\*(.*?)\*/g, "<i>$1</i>")
+            .replace(/\n/g, "<br>");
+
+        fb.innerHTML = "<h3>Werdykt Egzaminatora:</h3>" + cleanResponse;
+        fb.style.display = 'block';
+
+    } catch (e) {
+        console.error("Błąd:", e);
+        fb.innerHTML = `<b style='color:#e88'>Błąd: Nie udało się ocenić odpowiedzi. Spróbuj ponownie.</b>`;
+        fb.style.display = 'block';
+    } finally {
+        btn.disabled = false;
+        loader.style.display = 'none';
+    }
+}
     
     btn.disabled = true;
     loader.style.display = 'block';
