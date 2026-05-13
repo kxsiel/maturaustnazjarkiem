@@ -698,6 +698,401 @@
             from { opacity: 0; transform: translateY(16px); }
             to   { opacity: 1; transform: translateY(0); }
         }
+
+        /* === VIDEO SECTION === */
+        .video-card {
+            display: flex;
+            gap: 22px;
+            align-items: flex-start;
+            cursor: pointer;
+        }
+        .video-thumb-wrap {
+            position: relative;
+            flex-shrink: 0;
+            width: 230px;
+            border-radius: 5px;
+            overflow: hidden;
+            border: 1px solid rgba(200,168,75,0.22);
+        }
+        .video-thumb-wrap img {
+            width: 100%;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+        .video-card:hover .video-thumb-wrap img { transform: scale(1.04); }
+        .video-play-btn {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.38);
+            transition: background 0.2s;
+        }
+        .video-card:hover .video-play-btn { background: rgba(0,0,0,0.15); }
+        .video-play-btn svg { width: 52px; height: 52px; filter: drop-shadow(0 2px 10px rgba(0,0,0,0.8)); }
+        .video-info { flex: 1; }
+        .video-yt-badge {
+            font-size: 9px;
+            font-weight: 900;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #e05050;
+            background: rgba(224,80,80,0.1);
+            border: 1px solid rgba(224,80,80,0.28);
+            border-radius: 2px;
+            padding: 3px 8px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        .video-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 19px;
+            font-weight: 600;
+            color: var(--gold-light);
+            line-height: 1.35;
+            margin-bottom: 9px;
+            transition: color 0.2s;
+        }
+        .video-card:hover .video-title { color: #fff; }
+        .video-desc {
+            font-size: 12.5px;
+            color: rgba(240,232,212,0.55);
+            line-height: 1.65;
+            margin-bottom: 14px;
+        }
+        .video-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--gold);
+            border: 1px solid rgba(200,168,75,0.32);
+            border-radius: 3px;
+            padding: 7px 14px;
+            background: rgba(200,168,75,0.07);
+            transition: all 0.2s;
+        }
+        .video-card:hover .video-cta { background: rgba(200,168,75,0.16); border-color: var(--gold); }
+
+        /* chapters */
+        .video-chapters {
+            margin-top: 20px;
+            border-top: 1px solid rgba(200,168,75,0.1);
+            padding-top: 16px;
+        }
+        .video-chapters-label {
+            font-size: 9px;
+            font-weight: 900;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(200,168,75,0.45);
+            margin-bottom: 10px;
+        }
+        .chapters-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px 16px;
+        }
+        .chapter-item {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(200,168,75,0.05);
+            cursor: pointer;
+            transition: background 0.15s;
+            border-radius: 2px;
+            padding: 4px 6px;
+        }
+        .chapter-item:hover { background: rgba(200,168,75,0.07); }
+        .chapter-ts {
+            font-size: 11px;
+            font-weight: 900;
+            font-family: monospace;
+            color: var(--gold);
+            flex-shrink: 0;
+            min-width: 44px;
+        }
+        .chapter-name {
+            font-size: 11.5px;
+            color: rgba(240,232,212,0.65);
+            line-height: 1.4;
+        }
+        .chapter-item:hover .chapter-name { color: rgba(240,232,212,0.9); }
+
+        /* === VIDEO MODAL === */
+        #video-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(0,0,0,0.92);
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+        #video-modal.open { display: flex; animation: fadeUp 0.22s ease; }
+        .video-modal-inner {
+            position: relative;
+            width: 94%;
+            max-width: 960px;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+        .video-modal-topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 0 10px 0;
+        }
+        .video-modal-titlelabel {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 15px;
+            font-weight: 600;
+            color: rgba(200,168,75,0.7);
+            letter-spacing: 0.04em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 80%;
+        }
+        .video-modal-close {
+            background: none;
+            border: 1px solid rgba(200,168,75,0.25);
+            border-radius: 3px;
+            color: rgba(200,168,75,0.6);
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            cursor: pointer;
+            font-family: 'Lato', sans-serif;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 12px;
+            flex-shrink: 0;
+        }
+        .video-modal-close:hover { color: var(--gold-light); border-color: var(--gold); background: rgba(200,168,75,0.08); }
+
+        /* === CUSTOM PLAYER === */
+        .cp-wrap {
+            background: #0a0704;
+            border: 1px solid rgba(200,168,75,0.25);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 60px rgba(0,0,0,0.8), 0 0 0 1px rgba(200,168,75,0.1);
+        }
+        .cp-video-area {
+            position: relative;
+            background: #000;
+            cursor: pointer;
+        }
+        .cp-video-area video {
+            width: 100%;
+            display: block;
+            max-height: 54vh;
+            background: #000;
+        }
+        .cp-big-play {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.35);
+            transition: opacity 0.2s;
+        }
+        .cp-big-play.hidden { opacity: 0; pointer-events: none; }
+        .cp-big-play-btn {
+            width: 70px;
+            height: 70px;
+            background: rgba(200,168,75,0.15);
+            border: 2px solid rgba(200,168,75,0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            backdrop-filter: blur(4px);
+        }
+        .cp-big-play-btn:hover { background: rgba(200,168,75,0.28); border-color: var(--gold); transform: scale(1.08); }
+        .cp-big-play-btn svg { margin-left: 5px; }
+
+        /* chapter toast */
+        .cp-chapter-toast {
+            position: absolute;
+            top: 14px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(10,7,3,0.88);
+            border: 1px solid rgba(200,168,75,0.35);
+            border-radius: 4px;
+            padding: 6px 16px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            color: var(--gold-light);
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .cp-chapter-toast.show { opacity: 1; }
+
+        /* controls bar */
+        .cp-controls {
+            padding: 10px 14px 12px;
+            background: linear-gradient(180deg, #0e0a04, #0a0703);
+            border-top: 1px solid rgba(200,168,75,0.1);
+        }
+
+        /* progress */
+        .cp-progress-wrap {
+            position: relative;
+            height: 5px;
+            background: rgba(200,168,75,0.12);
+            border-radius: 3px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        .cp-progress-wrap:hover { height: 7px; margin-bottom: 8px; }
+        .cp-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--gold), var(--gold-light));
+            border-radius: 3px;
+            width: 0%;
+            pointer-events: none;
+            position: relative;
+        }
+        .cp-progress-fill::after {
+            content: '';
+            position: absolute;
+            right: -5px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 12px;
+            background: var(--gold-light);
+            border-radius: 50%;
+            box-shadow: 0 0 6px rgba(200,168,75,0.6);
+            opacity: 0;
+            transition: opacity 0.15s;
+        }
+        .cp-progress-wrap:hover .cp-progress-fill::after { opacity: 1; }
+
+        /* chapter markers on progress bar */
+        .cp-chapter-marker {
+            position: absolute;
+            top: 0;
+            width: 2px;
+            height: 100%;
+            background: rgba(200,168,75,0.45);
+            pointer-events: none;
+            border-radius: 1px;
+        }
+
+        /* chapter hover tooltip */
+        .cp-progress-tooltip {
+            position: absolute;
+            bottom: 14px;
+            transform: translateX(-50%);
+            background: rgba(10,7,3,0.95);
+            border: 1px solid rgba(200,168,75,0.3);
+            border-radius: 3px;
+            padding: 4px 10px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            color: var(--gold-light);
+            white-space: nowrap;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.15s;
+        }
+        .cp-progress-wrap:hover .cp-progress-tooltip { opacity: 1; }
+
+        /* bottom row */
+        .cp-bottom {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .cp-btn {
+            background: none;
+            border: none;
+            color: rgba(200,168,75,0.7);
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.15s, background 0.15s;
+            flex-shrink: 0;
+        }
+        .cp-btn:hover { color: var(--gold-light); background: rgba(200,168,75,0.1); }
+        .cp-time {
+            font-size: 11px;
+            font-weight: 700;
+            font-family: monospace;
+            color: rgba(200,168,75,0.55);
+            letter-spacing: 0.06em;
+            flex-shrink: 0;
+        }
+        .cp-vol-wrap {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .cp-vol-slider {
+            -webkit-appearance: none;
+            width: 64px;
+            height: 3px;
+            background: rgba(200,168,75,0.2);
+            border-radius: 2px;
+            outline: none;
+            cursor: pointer;
+        }
+        .cp-vol-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 12px;
+            height: 12px;
+            background: var(--gold);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .cp-speed {
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            color: rgba(200,168,75,0.55);
+            cursor: pointer;
+            border: 1px solid rgba(200,168,75,0.2);
+            border-radius: 3px;
+            padding: 3px 7px;
+            background: none;
+            font-family: 'Lato', sans-serif;
+            transition: all 0.15s;
+        }
+        .cp-speed:hover { color: var(--gold); border-color: rgba(200,168,75,0.5); }
+        .cp-spacer { flex: 1; }
+        .cp-chapter-label {
+            font-size: 10.5px;
+            color: rgba(200,168,75,0.4);
+            font-style: italic;
+            letter-spacing: 0.03em;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 260px;
+        }
     </style>
 </head>
 <body>
@@ -782,6 +1177,41 @@
         <div class="porady-inner">
             <h1 class="porady-main-title">Matura Ustna</h1>
             <p class="porady-main-sub">Najważniejsze porady</p>
+
+            <!-- VIDEO SECTION -->
+            <div class="porady-section">
+                <div class="porady-section-header">
+                    <span class="porady-section-badge">▶ Film</span>
+                    <span class="porady-section-title">Kompletny przewodnik wideo – Pytania jawne 2026</span>
+                </div>
+                <div class="porady-section-body">
+                    <div class="video-card" onclick="openVideo()">
+                        <div class="video-thumb-wrap">
+                            <img src="https://i.imgur.com/ZTCtQxA.png" alt="Miniatura – Matura ustna 2026 pytania jawne">
+                            <div class="video-play-btn">
+                                <svg viewBox="0 0 68 48" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="68" height="48" rx="10" fill="rgba(0,0,0,0.72)"/>
+                                    <polygon points="26,13 26,35 49,24" fill="#fff"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="video-info">
+                            <span class="video-yt-badge">YT: puchacz</span>
+                            <div class="video-title">Matura ustna z polskiego 2026 – wszystkie pytania jawne omówione</div>
+                            <div class="video-desc">Kompletny przewodnik po liście pytań jawnych na maturę ustną z polskiego 2026. Znajdziesz tutaj omówienie wszystkich zagadnień, które mogą pojawić się na egzaminie. Bez lania wody – same konkrety, kluczowe motywy i argumenty, które pomogą Ci przetrwać odpowiedź przed komisją.</div>
+                            <span class="video-cta">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                                Oglądaj teraz
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="video-chapters">
+                        <div class="video-chapters-label">Spis treści filmu</div>
+                        <div class="chapters-grid" id="chaptersGrid"></div>
+                    </div>
+                </div>
+            </div>
 
             <!-- TEMATY NIEJAWNE -->
             <div class="porady-section">
@@ -912,6 +1342,74 @@ Wielce szanowni panowie!</div>
         </div>
     </div>
 
+</div>
+
+<!-- VIDEO MODAL -->
+<div id="video-modal" onclick="closeVideoOnBackdrop(event)">
+    <div class="video-modal-inner">
+        <div class="video-modal-topbar">
+            <span class="video-modal-titlelabel">Matura ustna 2026 – pytania jawne</span>
+            <button class="video-modal-close" onclick="closeVideo()">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                Zamknij
+            </button>
+        </div>
+        <div class="cp-wrap">
+            <!-- VIDEO AREA -->
+            <div class="cp-video-area" id="cpVideoArea" onclick="cpTogglePlay()">
+                <video id="cpVideo" preload="metadata">
+                    <source src="https://str34.vidoza.net/vod/v2/nvl4e5lriifeieno3uadxa5emb6c4gu6oypvcyqlx3ywl6kzdexlwh6nwrjcxdnpya/v.mp4" type="video/mp4">
+                </video>
+                <div class="cp-big-play" id="cpBigPlay">
+                    <div class="cp-big-play-btn">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="rgba(200,168,75,0.9)"><path d="M8 5v14l11-7z"/></svg>
+                    </div>
+                </div>
+                <div class="cp-chapter-toast" id="cpToast"></div>
+            </div>
+
+            <!-- CONTROLS -->
+            <div class="cp-controls">
+                <!-- PROGRESS BAR -->
+                <div class="cp-progress-wrap" id="cpProgressWrap">
+                    <div class="cp-progress-fill" id="cpFill"></div>
+                    <div class="cp-progress-tooltip" id="cpTooltip">0:00</div>
+                </div>
+
+                <!-- BOTTOM ROW -->
+                <div class="cp-bottom">
+                    <!-- play/pause -->
+                    <button class="cp-btn" id="cpPlayBtn" onclick="cpTogglePlay()">
+                        <svg id="cpPlayIcon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                    </button>
+
+                    <!-- time -->
+                    <span class="cp-time" id="cpTime">0:00 / 0:00</span>
+
+                    <!-- volume -->
+                    <div class="cp-vol-wrap">
+                        <button class="cp-btn" id="cpMuteBtn" onclick="cpToggleMute()">
+                            <svg id="cpVolIcon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+                        </button>
+                        <input class="cp-vol-slider" id="cpVol" type="range" min="0" max="1" step="0.02" value="1" oninput="cpSetVol(this.value)">
+                    </div>
+
+                    <!-- speed -->
+                    <button class="cp-speed" id="cpSpeedBtn" onclick="cpCycleSpeed()">1×</button>
+
+                    <span class="cp-spacer"></span>
+
+                    <!-- current chapter label -->
+                    <span class="cp-chapter-label" id="cpChapterLabel">–</span>
+
+                    <!-- fullscreen -->
+                    <button class="cp-btn" onclick="cpFullscreen()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -1145,6 +1643,260 @@ FORMATOWANIE (BARDZO WAŻNE):
         loader.style.display = 'none';
     }
 }
+
+const CHAPTERS = [
+    { ts: "00:00",   s: 0,     label: "Wprowadzenie" },
+    { ts: "01:40",   s: 100,   label: "Motyw cierpienia niezawinionego — Hiob" },
+    { ts: "06:35",   s: 395,   label: "Człowiek wobec niestałości świata — Kohelet" },
+    { ts: "12:20",   s: 740,   label: "Wizja końca świata — Apokalipsa św. Jana" },
+    { ts: "19:00",   s: 1140,  label: "Poświęcenie w imię wartości — Prometeusz" },
+    { ts: "25:20",   s: 1520,  label: "Problematyka winy i kary — Syzyf" },
+    { ts: "32:17",   s: 1937,  label: "Miłość silniejsza niż śmierć — Orfeusz" },
+    { ts: "37:35",   s: 2255,  label: "Heroizm — Iliada Homera" },
+    { ts: "44:47",   s: 2687,  label: "Prawa boskie a ludzkie — Antygona" },
+    { ts: "50:50",   s: 3050,  label: "Człowiek wobec przeznaczenia — Antygona" },
+    { ts: "57:30",   s: 3450,  label: "Motyw cierpiącej matki — Lament świętokrzyski" },
+    { ts: "1:03:10", s: 3790,  label: "Motyw tańca śmierci — Mistrz Polikarp" },
+    { ts: "1:07:50", s: 4070,  label: "Wzorzec rycerza — Pieśń o Rolandzie" },
+    { ts: "1:13:15", s: 4395,  label: "Moralna odpowiedzialność — Makbet" },
+    { ts: "1:19:35", s: 4775,  label: "Czy człowiek decyduje o losie? — Makbet" },
+    { ts: "1:24:50", s: 5090,  label: "Wpływ władzy na człowieka — Makbet" },
+    { ts: "1:30:40", s: 5440,  label: "Dobra materialne a szczęście — Skąpiec" },
+    { ts: "1:36:29", s: 5789,  label: "Nieporozumienia rodzice–dzieci — Skąpiec" },
+    { ts: "1:41:02", s: 6062,  label: "Wady w krzywym zwierciadle satyry — Krasicki" },
+    { ts: "1:47:15", s: 6435,  label: "Świat ducha a świat rozumu — Romantyczność" },
+    { ts: "1:54:01", s: 6841,  label: "Ludowa sprawiedliwość — Ballady Mickiewicza" },
+    { ts: "2:00:17", s: 7217,  label: "Losy młodzieży pod zaborami — Dziady III" },
+    { ts: "2:05:45", s: 7545,  label: "Mesjanizm — Dziady III" },
+    { ts: "2:11:35", s: 7895,  label: "Postawy wobec zaborcy — Dziady III" },
+    { ts: "2:18:18", s: 8298,  label: "Różne postawy wobec Boga — Dziady III" },
+    { ts: "2:23:10", s: 8590,  label: "Prawdy o człowieku w snach — Dziady III" },
+    { ts: "2:30:02", s: 9002,  label: "Nawiązania do motywów biblijnych" },
+    { ts: "2:37:55", s: 9475,  label: "Walka dobra ze złem o duszę — Dziady III" },
+    { ts: "2:43:20", s: 9800,  label: "Czym jest wolność? — Dziady III" },
+    { ts: "2:49:45", s: 10185, label: "Motyw samotności — Dziady III" },
+    { ts: "2:56:10", s: 10570, label: "Pytania jawne — Lalka" },
+    { ts: "3:33:10", s: 12790, label: "Postawy odwagi i tchórzostwa — Potop" },
+    { ts: "3:38:30", s: 13110, label: "Pytania jawne — Zbrodnia i kara" },
+    { ts: "4:02:25", s: 14545, label: "Bariery w porozumieniu — Wesele" },
+    { ts: "4:07:05", s: 14825, label: "Rola chłopów i inteligencji — Wesele" },
+    { ts: "4:12:55", s: 15175, label: "Sen o Polsce czy sąd? — Wesele" },
+    { ts: "4:18:59", s: 15539, label: "Symbolika widm i zjaw — Wesele" },
+    { ts: "4:23:53", s: 15833, label: "Motyw tańca — Wesele" },
+    { ts: "4:28:24", s: 16104, label: "Obyczaj i tradycja — Chłopi" },
+    { ts: "4:34:38", s: 16478, label: "Pytania jawne — Przedwiośnie" },
+    { ts: "5:09:24", s: 18564, label: "Groteskowy obraz świata — Ferdydurke" },
+    { ts: "5:15:26", s: 18926, label: "Człowiek wobec presji otoczenia — Ferdydurke" },
+    { ts: "5:20:29", s: 19229, label: "Człowiek zlagrowany — Proszę państwa do gazu" },
+    { ts: "5:24:35", s: 19475, label: "Znaczenie tytułu — Inny świat" },
+    { ts: "5:29:30", s: 19770, label: "Konsekwencje zniewolenia — Inny świat" },
+    { ts: "5:33:45", s: 20025, label: "Zachowanie godności — Zdążyć przed Panem Bogiem" },
+    { ts: "5:40:10", s: 20410, label: "Zagłada z perspektywy świadka — Zdążyć" },
+    { ts: "5:46:25", s: 20785, label: "Walka o życie — perspektywa wojenna" },
+    { ts: "5:52:55", s: 21175, label: "Co skłania do poświęceń? — Dżuma" },
+    { ts: "5:57:15", s: 21435, label: "Człowiek wobec cierpienia i śmierci — Dżuma" },
+    { ts: "6:00:30", s: 21630, label: "Przyjaźń w sytuacjach skrajnych — Dżuma" },
+    { ts: "6:04:50", s: 21890, label: "Postawy człowieka wobec zła — Dżuma" },
+    { ts: "6:09:40", s: 22180, label: "Doskonałe państwo? — Rok 1984" },
+    { ts: "6:15:12", s: 22512, label: "Wolność w państwie totalitarnym — Rok 1984" },
+    { ts: "6:19:38", s: 22778, label: "Znaczenie propagandy — Rok 1984" },
+    { ts: "6:25:25", s: 23125, label: "Nowomowa — Rok 1984" },
+    { ts: "6:29:40", s: 23380, label: "Bunt przeciwko porządkowi — Tango" },
+    { ts: "6:34:05", s: 23645, label: "Konflikt pokoleń — Tango" },
+    { ts: "6:39:36", s: 23976, label: "Normy społeczne — Tango" },
+    { ts: "6:45:10", s: 24310, label: "Nawiązania intertekstualne — Górą Edek" },
+    { ts: "6:49:48", s: 24588, label: "Miejsca ważne dla człowieka — Miejsce" },
+    { ts: "6:49:50", s: 24590, label: "Stan wojenny — Profesor Andrews w Warszawie" },
+    { ts: "6:59:45", s: 25185, label: "Czym jest podróżowanie? — Podróże z Herodotem" },
+];
+
+(function buildChapters() {
+    const grid = document.getElementById('chaptersGrid');
+    if (!grid) return;
+    CHAPTERS.forEach(ch => {
+        const el = document.createElement('div');
+        el.className = 'chapter-item';
+        el.innerHTML = `<span class="chapter-ts">${ch.ts}</span><span class="chapter-name">${ch.label}</span>`;
+        el.onclick = (e) => { e.stopPropagation(); openVideo(ch.s); };
+        grid.appendChild(el);
+    });
+})();
+
+/* ===== CUSTOM PLAYER ===== */
+const CP_SRC = 'https://str34.vidoza.net/vod/v2/nvl4e5lriifeieno3uadxa5emb6c4gu6oypvcyqlx3ywl6kzdexlwh6nwrjcxdnpya/v.mp4';
+const SPEEDS = [0.5, 0.75, 1, 1.25, 1.5, 2];
+let cpSpeedIdx = 2;
+let cpToastTimer = null;
+
+function cpEl(id) { return document.getElementById(id); }
+
+function fmtTime(s) {
+    if (isNaN(s)) return '0:00';
+    const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = Math.floor(s % 60);
+    return h > 0 ? `${h}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`
+                 : `${m}:${String(sec).padStart(2,'0')}`;
+}
+
+function cpCurrentChapter(t) {
+    let ch = CHAPTERS[0];
+    for (let i = 0; i < CHAPTERS.length; i++) { if (t >= CHAPTERS[i].s) ch = CHAPTERS[i]; else break; }
+    return ch;
+}
+
+function cpBuildMarkers() {
+    const wrap = cpEl('cpProgressWrap');
+    const vid = cpEl('cpVideo');
+    vid.addEventListener('loadedmetadata', () => {
+        const dur = vid.duration;
+        CHAPTERS.forEach(ch => {
+            if (ch.s === 0) return;
+            const m = document.createElement('div');
+            m.className = 'cp-chapter-marker';
+            m.style.left = (ch.s / dur * 100) + '%';
+            wrap.appendChild(m);
+        });
+    });
+}
+
+function cpInit() {
+    const vid = cpEl('cpVideo');
+    const fill = cpEl('cpFill');
+    const timeEl = cpEl('cpTime');
+    const wrap = cpEl('cpProgressWrap');
+    const tooltip = cpEl('cpTooltip');
+    const chLabel = cpEl('cpChapterLabel');
+    const bigPlay = cpEl('cpBigPlay');
+    const playIcon = cpEl('cpPlayIcon');
+
+    cpBuildMarkers();
+
+    vid.addEventListener('timeupdate', () => {
+        if (!vid.duration) return;
+        const pct = (vid.currentTime / vid.duration) * 100;
+        fill.style.width = pct + '%';
+        timeEl.textContent = fmtTime(vid.currentTime) + ' / ' + fmtTime(vid.duration);
+        const ch = cpCurrentChapter(vid.currentTime);
+        chLabel.textContent = ch ? ch.label : '–';
+    });
+
+    vid.addEventListener('play', () => {
+        bigPlay.classList.add('hidden');
+        playIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+    });
+    vid.addEventListener('pause', () => {
+        bigPlay.classList.remove('hidden');
+        playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+    });
+    vid.addEventListener('ended', () => {
+        bigPlay.classList.remove('hidden');
+        playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+    });
+
+    /* progress click & drag */
+    let dragging = false;
+    function seekTo(e) {
+        const rect = wrap.getBoundingClientRect();
+        const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+        if (vid.duration) vid.currentTime = pct * vid.duration;
+    }
+    wrap.addEventListener('mousedown', e => { dragging = true; seekTo(e); });
+    document.addEventListener('mousemove', e => { 
+        if (dragging) seekTo(e);
+        /* tooltip */
+        if (wrap.matches(':hover') && vid.duration) {
+            const rect = wrap.getBoundingClientRect();
+            const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+            const t = pct * vid.duration;
+            tooltip.textContent = fmtTime(t);
+            tooltip.style.left = (pct * 100) + '%';
+        }
+    });
+    document.addEventListener('mouseup', () => { dragging = false; });
+
+    /* keyboard shortcuts inside modal */
+    document.addEventListener('keydown', e => {
+        if (!cpEl('video-modal').classList.contains('open')) return;
+        if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
+        if (e.key === ' ' || e.code === 'Space') { e.preventDefault(); cpTogglePlay(); }
+        if (e.key === 'ArrowRight') { vid.currentTime = Math.min(vid.duration, vid.currentTime + 10); }
+        if (e.key === 'ArrowLeft') { vid.currentTime = Math.max(0, vid.currentTime - 10); }
+        if (e.key === 'Escape') closeVideo();
+    });
+}
+
+function cpTogglePlay() {
+    const vid = cpEl('cpVideo');
+    vid.paused ? vid.play() : vid.pause();
+}
+
+function cpToggleMute() {
+    const vid = cpEl('cpVideo');
+    vid.muted = !vid.muted;
+    const icon = cpEl('cpVolIcon');
+    icon.innerHTML = vid.muted
+        ? '<path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>'
+        : '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>';
+}
+
+function cpSetVol(v) {
+    const vid = cpEl('cpVideo');
+    vid.volume = v;
+    vid.muted = (v == 0);
+}
+
+function cpCycleSpeed() {
+    cpSpeedIdx = (cpSpeedIdx + 1) % SPEEDS.length;
+    const s = SPEEDS[cpSpeedIdx];
+    cpEl('cpVideo').playbackRate = s;
+    cpEl('cpSpeedBtn').textContent = s + '×';
+}
+
+function cpFullscreen() {
+    const wrap = cpEl('cpVideoArea');
+    if (document.fullscreenElement) document.exitFullscreen();
+    else wrap.requestFullscreen && wrap.requestFullscreen();
+}
+
+function cpShowToast(text) {
+    const t = cpEl('cpToast');
+    t.textContent = text;
+    t.classList.add('show');
+    clearTimeout(cpToastTimer);
+    cpToastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function openVideo(startSec) {
+    const modal = cpEl('video-modal');
+    const vid = cpEl('cpVideo');
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    if (startSec !== undefined && startSec > 0) {
+        const doSeek = () => {
+            vid.currentTime = startSec;
+            const ch = cpCurrentChapter(startSec);
+            if (ch) cpShowToast('▶ ' + ch.label);
+            vid.play();
+        };
+        if (vid.readyState >= 1) { doSeek(); }
+        else { vid.addEventListener('loadedmetadata', doSeek, { once: true }); }
+    } else {
+        vid.play();
+    }
+}
+
+function closeVideo() {
+    const vid = cpEl('cpVideo');
+    vid.pause();
+    cpEl('video-modal').classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+function closeVideoOnBackdrop(e) {
+    if (e.target === cpEl('video-modal')) closeVideo();
+}
+
+/* init player on load */
+document.addEventListener('DOMContentLoaded', cpInit);
 
 render();
 </script>
