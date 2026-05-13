@@ -1572,74 +1572,25 @@ function renderExamples() {
     });
 }
 
-async function askAI() {
-    const btn = document.getElementById('btn');
-    const loader = document.getElementById('loader');
-    const fb = document.getElementById('feedback');
+const prompt = `Jesteś egzaminatorem CKE sprawdzającym maturę ustną z języka polskiego. Twoim celem jest ocena, czy uczeń zna lekturę i potrafi wyciągnąć z niej wnioski zgodne z kluczem odpowiedzi.
 
-    if (!btn || !loader || !fb) return;
+DANE UCZNIA:
+Teza: ${teza}
+Argumentacja (lektura): ${lekturaInfo}
+Kontekst: ${kontekst}
 
-    const tytulTematu = (typeof sel !== 'undefined' && sel) ? sel.t : "Nieznany temat";
-    const teza = document.getElementById('inT')?.value || "";
-    const lekturaInfo = document.getElementById('inL')?.value || "";
-    const kontekst = document.getElementById('inK')?.value || "";
+TWOJE WYTYCZNE (BARDZO WAŻNE):
+1. BĄDŹ ŻYCZLIWY: Jeśli uczeń pisze o Antygonie w kontekście praw boskich, to jest to POPRAWNE. Nie wymagaj od niego definicji naukowych ani teologicznych.
+2. BŁĘDY RZECZOWE: Poprawiaj TYLKO jeśli uczeń pomyli imiona, wydarzenia, autorów lub epoki (np. jeśli napisze, że Antygona to postać z Romantyzmu). 
+3. LOGIKA: Nie czepiaj się "generalizacji". Jeśli argument z lektury pasuje do tezy, uznaj go.
+4. KONTEKST: Kontekst współczesny (protesty, strajki) jest w pełni dopuszczalny na maturze jako kontekst społeczny. Uznaj go, jeśli wiąże się z tezą.
 
-    const prompt = `Jesteś egzaminatorem CKE. Oceń merytorykę maturalną.
-    TEMAT: "${tytulTematu}"
-    TEZA: ${teza}
-    LEKTURA: ${lekturaInfo}
-    KONTEKST: ${kontekst}
-    
-    ZADANIA:
-    1. IDENTYFIKACJA: Autor i tytuł lektury.
-    2. OCENA: Sprawdź merytorykę i logikę.
-    3. BŁĘDY: Wskaż konkretne błędy rzeczowe.
-    4. KONTEKST: Oceń czy pasuje do tezy.
-    5. WERDYKT: "WERDYKT: JEST OKEJ" lub "WERDYKT: SŁABO".
-
-    WAŻNE: Odpowiadaj w HTML. Używaj TYLKO <b> i <br>. Nie używaj gwiazdek ani markdownu.`;
-
-    btn.disabled = true;
-    loader.style.display = 'block';
-    fb.style.display = 'none';
-
-    try {
-        // Używamy Pollinations AI - jest darmowe, publiczne i bardzo stabilne
-        const response = await fetch('https://text.pollinations.ai/', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                messages: [
-                    { role: "system", content: "Jesteś surowym egzaminatorem CKE. Piszesz tylko w czystym HTML (<b>, <br>)." },
-                    { role: "user", content: prompt }
-                ],
-                model: "openai", // Korzysta z wysokiej jakości modelu
-                seed: 42 // Stały seed sprawia, że odpowiedzi są bardziej przewidywalne
-            })
-        });
-
-        if (!response.ok) throw new Error("Problem z serwerem AI.");
-
-        const aiResponse = await response.text();
-
-        // Dodatkowe czyszczenie na wypadek, gdyby AI jednak użyło gwiazdek
-        const cleanResponse = aiResponse
-            .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>")
-            .replace(/\*(.*?)\*/g, "<i>$1</i>")
-            .replace(/\n/g, "<br>");
-
-        fb.innerHTML = "<h3>Werdykt Egzaminatora:</h3>" + cleanResponse;
-        fb.style.display = 'block';
-
-    } catch (e) {
-        console.error("Szczegóły błędu:", e);
-        fb.innerHTML = `<b style='color:#e88'>Błąd: Nie udało się pobrać werdyktu. Spróbuj ponownie.</b>`;
-        fb.style.display = 'block';
-    } finally {
-        btn.disabled = false;
-        loader.style.display = 'none';
-    }
-}
+STRUKTURA ODPOWIEDZI (Używaj tylko <b> i <br>):
+<b>IDENTYFIKACJA:</b> (Autor i tytuł lektury)
+<br><b>OCENA:</b> (Krótka informacja, że argumentacja jest trafna i zgodna z treścią utworu)
+<br><b>BŁĘDY:</b> (Wymień tylko jeśli przekręcił fakty. Jeśli nie ma błędów, napisz: "Brak błędów merytorycznych")
+<br><b>KONTEKST:</b> (Potwierdź, że kontekst wspiera wypowiedź)
+<br><b>WERDYKT: JEST OKEJ</b> (Pisz to zawsze, gdy praca jest na temat i nie ma kardynalnych błędów w faktach).`;
 
 const CHAPTERS = [
     { ts: "00:00",   s: 0,     label: "Wprowadzenie" },
