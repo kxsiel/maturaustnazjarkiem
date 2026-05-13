@@ -1609,7 +1609,7 @@ FORMATOWANIE (BARDZO WAŻNE):
 
     try {
         // Korzystamy z API, które ma dostęp do nowszych modeli
-        const response = await fetch('https://free-unoficial-gpt4o-mini-api-g70n.onrender.com/chat/?query=' + encodeURIComponent(prompt));
+        const response = await fetch('https://text.pollinations.ai/' + encodeURIComponent(prompt));
         const data = await response.json();
         const aiResponse = data.results || data.reply || data.response || "Błąd komunikacji.";
 
