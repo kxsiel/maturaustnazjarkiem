@@ -1577,27 +1577,28 @@ async function askAI() {
     const loader = document.getElementById('loader');
     const fb = document.getElementById('feedback');
 
-    // Pobieramy dane bezpośrednio z Twojego interfejsu
-    const tytulTematu = sel ? sel.t : "Nieznany temat";
+    // Pobieramy dane z interfejsu
+    // Upewnij się, że zmienna 'sel' jest dostępna w Twoim skrypcie
+    const tytulTematu = (typeof sel !== 'undefined' && sel) ? sel.t : "Nieznany temat";
     const teza = document.getElementById('inT').value;
     const lekturaInfo = document.getElementById('inL').value;
     const kontekst = document.getElementById('inK').value;
 
-    const prompt = `Twoim zadaniem jest ocenienie zadań - nie bądź surowy raczej normalny i racjonalny przedewszystkim.
+    const prompt = `Jesteś konkretnym egzaminatorem CKE. Twoim zadaniem jest surowa ocena merytoryczna.
 
 TEMAT WYBRANY PRZEZ UCZNIA: "${tytulTematu}"
 
-ODPOWIEDŹ UCZNIA
+ODPOWIEDŹ UCZNIA DO OCENY:
 - Teza: ${teza}
 - Argumentacja/Lektura: ${lekturaInfo}
 - Kontekst: ${kontekst}
 
 TWOJE ZADANIA:
-1. IDENTYFIKACJA: Napisz autora i tytył lektury o jakiej uczeń mówi.
+1. IDENTYFIKACJA: Na podstawie powyższych danych ustal, o jakiej lekturze pisze uczeń i czy pasuje ona do tematu.
 2. OCENA MERYTORYCZNA: Jeśli zdania są poprawne i sensowne, NIE ZMIENIAJ ICH. Potwierdź tylko, że są dobre.
-3. BŁĘDY: Nie poprawiaj tylko napisz że to nie jest logiczne i dlaczego (Jeśli ma zdania poprzekręcane lub ma inne ułożenie zdań kolejnością to nie jest to błąd)
-4. KONTEKST: Sprawdź, czy kontekst ma sens (życiowy lub historyczny może się on do tego odnosić lecz ma potwierdzać tezę więc nie pisz mu że nie odnosi się do lektury tylko do tezy
-5. WERDYKT: Na koniec napisz krótko: "Jest okej" (jeśli praca przechodzi) lub "Jest słabo".
+3. BŁĘDY: Poprawiaj tylko wtedy, gdy uczeń pisze głupoty, myli fakty z lektury lub jego argumentacja jest nielogiczna. Napisz wtedy konkretnie: "Tu jest błąd rzeczowy: [opis], powinno być: [poprawka]".
+4. KONTEKST: Sprawdź, czy kontekst (życiowy/historyczny) faktycznie wspiera tezę.
+5. WERDYKT: Na koniec napisz krótko: "WERDYKT: JEST OKEJ" (jeśli praca przechodzi) lub "WERDYKT: SŁABO" (jeśli są kardynalne błędy).
 
 FORMATOWANIE (BARDZO WAŻNE):
 - Używaj TYLKO tagów HTML: <b>pogrubienie</b> oraz <br> dla nowej linii.
@@ -1608,31 +1609,61 @@ FORMATOWANIE (BARDZO WAŻNE):
     fb.style.display = 'none';
 
     try {
-        // Korzystamy z API, które ma dostęp do nowszych modeli
-        const response = await fetch('https://text.pollinations.ai/' + encodeURIComponent(prompt));
-        const data = await response.json();
-        const aiResponse = data.results || data.reply || data.response || "Błąd komunikacji.";
+        // GŁÓWNE API GEMINI
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyAbqkqGbRl1jaj65Jh3FLQR9w3wj1X6kgs`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                contents: [{
+                    parts: [{ text: prompt }]
+                }]
+            })
+        });
 
-        // Czyścimy tekst z gwiazdek i zamieniamy entery na tagi HTML
-        const cleanResponse = aiResponse.replace(/\*\*(.*?)\*\*/g, "<b>$1</b>")
-                                        .replace(/\*(.*?)\*/g, "<i>$1</i>")
-                                        .replace(/\n/g, "<br>");
+        const data = await response.json();
+
+        if (data.error) {
+            throw new Error(data.error.message);
+        }
+
+        const aiResponse = data.candidates[0].content.parts[0].text;
+
+        // Czyszczenie i formatowanie tekstu
+        const cleanResponse = aiResponse
+            .replace(/\*\*\*(.*?)\*\*\*/g, "<b>$1</b>")
+            .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>")
+            .replace(/\*(.*?)\*/g, "<i>$1</i>")
+            .replace(/\n/g, "<br>");
 
         fb.innerHTML = "<h3>Werdykt Egzaminatora:</h3>" + cleanResponse;
         fb.style.display = 'block';
+
     } catch (e) {
-        // Szybki fallback do Pollinations w razie awarii głównego API
+        console.error("Błąd Gemini:", e);
+        
+        // FALLBACK DO POLLINATIONS
         try {
             const altRes = await fetch('https://text.pollinations.ai/', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ messages: [{role: "user", content: prompt}], model: "openai" })
+                body: JSON.stringify({ 
+                    messages: [{role: "user", content: prompt}], 
+                    model: "openai" 
+                })
             });
+            
             const altText = await altRes.text();
-            fb.innerHTML = "<h3>Werdykt Egzaminatora:</h3>" + altText.replace(/\*\*(.*?)\*\*/g, "<b>$1</b>").replace(/\n/g, "<br>");
+            const formattedAlt = altText
+                .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>")
+                .replace(/\n/g, "<br>");
+                
+            fb.innerHTML = "<h3>Werdykt Egzaminatora (serwer zapasowy):</h3>" + formattedAlt;
             fb.style.display = 'block';
+            
         } catch(e2) {
-            fb.innerHTML = "<b style='color:#e88'>Błąd połączenia. Sprawdź internet.</b>";
+            fb.innerHTML = "<b style='color:#e88'>Błąd połączenia. Sprawdź internet lub klucz API.</b>";
             fb.style.display = 'block';
         }
     } finally {
@@ -1640,6 +1671,7 @@ FORMATOWANIE (BARDZO WAŻNE):
         loader.style.display = 'none';
     }
 }
+
 
 const CHAPTERS = [
     { ts: "00:00",   s: 0,     label: "Wprowadzenie" },
